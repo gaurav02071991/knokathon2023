@@ -12,15 +12,14 @@ function App() {
   ];
 
   const initialBotMessageSent = useRef(false);
+  let [currentQuestion, setCurrentQuestion] = useState(0);
 
   useEffect(() => {
-    if (currentQuestion === 0 && !initialBotMessageSent.current) {
+    if (!initialBotMessageSent.current) {
       addMessageToHistory(questions[currentQuestion], "Bot");
       initialBotMessageSent.current = true;
     }
-  }, []);
-
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+  }, [currentQuestion]);
 
   const addMessageToHistory = (message, user) => {
     setChatHistory((prevHistory) => [
@@ -45,7 +44,7 @@ function App() {
 
         try {
           // Replace with your API endpoint
-          const apiUrl = "https://api.answers.com"; // Replace with your actual API URL
+          const apiUrl = "https://localhost:3000/chat"; // Replace with your actual API URL
          // const response = await fetch(apiUrl);
           if (true) {
             //const data = await response.json();
@@ -61,7 +60,7 @@ function App() {
 
         setTimeout(() => {
           setCurrentQuestion(currentQuestion + 1);
-          addMessageToHistory(questions[currentQuestion], "Bot");
+          addMessageToHistory(questions[++currentQuestion], "Bot");
         }, 1000); // Delay to simulate bot response
       } else {
         setCurrentQuestion(-1);
