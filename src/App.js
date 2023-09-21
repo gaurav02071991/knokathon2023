@@ -33,13 +33,32 @@ function App() {
     setUserInput(e.target.value);
   };
 
-  const handleKeyUp = (e) => {
+  const handleKeyUp = async (e) => {
     if (e.key === "Enter" && userInput.trim() !== "") {
       const answer = userInput.trim();
       addMessageToHistory(answer, "You");
       setUserInput("");
 
       if (currentQuestion < questions.length - 1) {
+        // Simulate bot thinking time
+        addMessageToHistory("Bot is typing...", "Bot");
+
+        try {
+          // Replace with your API endpoint
+          const apiUrl = "https://api.answers.com"; // Replace with your actual API URL
+         // const response = await fetch(apiUrl);
+          if (true) {
+            //const data = await response.json();
+            const botResponse = "answer" //data.answer; // Adjust the response parsing as needed
+            addMessageToHistory(botResponse, "Bot");
+          } else {
+            addMessageToHistory("Bot: Sorry, I couldn't fetch the answer.", "Bot");
+          }
+        } catch (error) {
+          console.error(error);
+          addMessageToHistory("Bot: Sorry, an error occurred while fetching the answer.", "Bot");
+        }
+
         setTimeout(() => {
           setCurrentQuestion(currentQuestion + 1);
           addMessageToHistory(questions[currentQuestion], "Bot");
