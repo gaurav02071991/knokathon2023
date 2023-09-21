@@ -7,6 +7,7 @@ const port = 3001; // Set your desired port
 const authToken = process.env.AUTH_TOKEN;// Replace with your actual authorization token
 
 app.use(express.json());
+//test
 
 // Define a common route for GET, POST, and PUT requests to api.public.in
 app.all('/:endpoint', async (req, res) => {
