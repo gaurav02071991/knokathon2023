@@ -1,8 +1,10 @@
 const express = require('express');
 const axios = require('axios');
+const dotenv = require('dotenv');
+dotenv.config();
 const app = express();
 const port = 3001; // Set your desired port
-const authToken = 'YOUR_AUTH_TOKEN'; // Replace with your actual authorization token
+const authToken = process.env.AUTH_TOKEN;// Replace with your actual authorization token
 
 app.use(express.json());
 
