@@ -5,7 +5,7 @@ function App() {
   const [chatHistory, setChatHistory] = useState([]);
   const [userInput, setUserInput] = useState("");
   const questions = [
-    "Welcome to claim filing process?Can you provide us your phone Number or policyNumber",
+    "What is your name?",
     "Where are you from?",
     "What is your favorite color?",
     "What do you like to do in your free time?",
@@ -15,7 +15,7 @@ function App() {
 
   useEffect(() => {
     if (currentQuestion === 0 && !initialBotMessageSent.current) {
-      addMessageToHistory(questions[currentQuestion], "ClaimBot");
+      addMessageToHistory(questions[currentQuestion], "Bot");
       initialBotMessageSent.current = true;
     }
   }, []);
@@ -55,7 +55,10 @@ function App() {
       <div className="Chat">
         <div className="MessageList">
           {chatHistory.map((message, index) => (
-            <div className="Message" key={index}>
+            <div
+              className={`Message ${message.user === "Bot" ? "BotMessage" : "UserMessage"}`}
+              key={index}
+            >
               <strong>{message.user}:</strong> {message.text}
             </div>
           ))}
