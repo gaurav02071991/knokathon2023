@@ -3,10 +3,9 @@ import "./App.css";
 
 function App() {
   const [chatHistory, setChatHistory] = useState([]);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
   const [userInput, setUserInput] = useState("");
   const questions = [
-    "What is your name?",
+    "Welcome to claim filing process?Can you provide us your phone Number or policyNumber",
     "Where are you from?",
     "What is your favorite color?",
     "What do you like to do in your free time?",
@@ -16,10 +15,19 @@ function App() {
 
   useEffect(() => {
     if (currentQuestion === 0 && !initialBotMessageSent.current) {
-      setChatHistory([...chatHistory, { text: questions[currentQuestion], user: "Bot" }]);
+      addMessageToHistory(questions[currentQuestion], "ClaimBot");
       initialBotMessageSent.current = true;
     }
-  }, [currentQuestion, chatHistory]);
+  }, []);
+
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+
+  const addMessageToHistory = (message, user) => {
+    setChatHistory((prevHistory) => [
+      ...prevHistory,
+      { text: message, user },
+    ]);
+  };
 
   const handleInputChange = (e) => {
     setUserInput(e.target.value);
@@ -28,14 +36,13 @@ function App() {
   const handleKeyUp = (e) => {
     if (e.key === "Enter" && userInput.trim() !== "") {
       const answer = userInput.trim();
-      const newMessage = { text: answer, user: "You" };
-      setChatHistory([...chatHistory, newMessage]);
+      addMessageToHistory(answer, "You");
       setUserInput("");
 
       if (currentQuestion < questions.length - 1) {
         setTimeout(() => {
           setCurrentQuestion(currentQuestion + 1);
-          setChatHistory([...chatHistory, { text: questions[currentQuestion + 1], user: "Bot" }]);
+          addMessageToHistory(questions[currentQuestion], "Bot");
         }, 1000); // Delay to simulate bot response
       } else {
         setCurrentQuestion(-1);
