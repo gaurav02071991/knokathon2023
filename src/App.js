@@ -1,115 +1,63 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import "./App.css";
-import {questions} from './helpers';
 
 function App() {
-  const [chatHistory, setChatHistory] = useState([]);
-  const [userInput, setUserInput] = useState("");
+  const [userMessage, setUserMessage] = useState("");
+  const [botMessages, setBotMessages] = useState([]);
+  const [conversationHistory, setConversationHistory] = useState([]);
 
-  const initialBotMessageSent = useRef(false);
-  let [currentQuestion, setCurrentQuestion] = useState(0);
-  // const [policyData, setPolicyData] = useState(null);
-  // const dummyPolicyData = {
-  //   policyNumber: "12345",
-  //   phoneNumber: "555-555-5555",
-  // };
-  
+  const sendMessage = async () => {
+    if (userMessage.trim() !== "") {
+      try {
+        // Make an API request to the backend
+        const response = await axios.post("http://localhost:5000/api/chat", { message: userMessage });
 
-  useEffect(() => {
-    if (!initialBotMessageSent.current) {
-      addMessageToHistory(questions[currentQuestion].question, "Bot");
-      initialBotMessageSent.current = true;
-    }
-  }, [currentQuestion]);
+        // Update the conversation history
+        const updatedHistory = [
+          ...conversationHistory,
+          { role: "user", text: userMessage },
+          { role: "bot", text: response.data.message },
+        ];
+        setConversationHistory(updatedHistory);
 
-  const addMessageToHistory = (message, user) => {
-    setChatHistory((prevHistory) => [
-      ...prevHistory,
-      { text: message, user },
-    ]);
-  };
-
-  const handleInputChange = (e) => {
-    setUserInput(e.target.value);
-  };
-
-  const handleKeyUp = async (e) => {
-    if (e.key === "Enter" && userInput.trim() !== "") {
-      const answer = userInput.trim();
-      addMessageToHistory(answer, "You");
-      setUserInput("");
-
-      if (currentQuestion === 0) {
-        // Simulate bot thinking time
-        addMessageToHistory("Bot is processing your request...", "Bot");
-
-        try {
-          // Replace with your API endpoint to fetch policy data
-          let apiUrl = '';
-          let queryString = '';
-          let response = '';
-
-          if(questions[currentQuestion].endpoint.url){
-         apiUrl = `http://localhost:3001/${questions[currentQuestion].endpoint.url}`; // Replace with your actual API URL
-         const queryParams = { question: questions[currentQuestion].question, answer };
-         queryString = new URLSearchParams(queryParams).toString();
-         response = await fetch(`${apiUrl}?${queryString}`);
-          }
-          else {
-            response.status = 200;
-          }
-          
-          if (response.status===200) {
-            const data = await response.json();
-            const botResponse = questions[currentQuestion].endpoint.successmessage(data); // Adjust the response parsing as needed
-            addMessageToHistory(botResponse, "Bot");
-          } else {
-            addMessageToHistory("Bot: Sorry, I couldn't fetch the policy data.", "Bot");
-          }
-        } catch (error) {
-          console.error(error);
-          addMessageToHistory("Bot: Sorry, an error occurred while fetching the policy data.", "Bot");
-        }
-      } else if (currentQuestion < questions.length - 1) {
-        // Continue with the rest of the questions
-        setCurrentQuestion(currentQuestion + 1);
-        addMessageToHistory(questions[currentQuestion++].question, "Bot");
-      } else {
-        // No more questions, end the conversation
-        setCurrentQuestion(-1);
+        // Update the bot's response
+        setBotMessages([...botMessages, response.data.message]);
+      } catch (error) {
+        console.error("Error sending message:", error);
+        setBotMessages([...botMessages, "An error occurred."]);
       }
+
+      // Clear the user input
+      setUserMessage("");
     }
   };
 
   return (
     <div className="App">
-      <div className="Chat">
-        <div className="MessageList">
-          {chatHistory.map((message, index) => (
-            <div
-              className={`Message ${message.user === "Bot" ? "BotMessage" : "UserMessage"}`}
-              key={index}
-            >
-              <strong>{message.user}:</strong> {message.text}
-            </div>
-          ))}
-        </div>
-        {currentQuestion >= 0 ? (
-          <div className="MessageForm">
-            <input
-              type="text"
-              placeholder="Type your answer..."
-              value={userInput}
-              onChange={handleInputChange}
-              onKeyUp={handleKeyUp}
-            />
+      <h1>ChatBot</h1>
+      <div className="chat-container">
+        {conversationHistory.map((message, index) => (
+          <div
+            key={index}
+            className={`message ${message.role === "bot" ? "bot" : "user"}`}
+          >
+            {message.text}
           </div>
-        ) : (
-          <div className="MessageForm">
-            <p>Chatbot: Thank you for answering the questions!</p>
-          </div>
-        )}
+        ))}
       </div>
+      <input
+        type="text"
+        placeholder="Type a message..."
+        value={userMessage}
+        onChange={(e) => setUserMessage(e.target.value)}
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        }}
+      />
+      <button onClick={sendMessage}>Send</button>
     </div>
   );
 }

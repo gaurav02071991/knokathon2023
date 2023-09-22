@@ -1,62 +1,83 @@
-.App {
-  text-align: center;
-  font-family: Arial, sans-serif;
+/* Reset some default browser styles */
+body,
+h1,
+h2,
+p,
+ul {
+  margin: 0;
+  padding: 0;
 }
 
-.Chat {
-  display: flex;
-  flex-direction: column;
-  max-width: 1000px;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+.App {
+  max-width: 600px;
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
-.MessageList {
-  flex: 1;
-  overflow-y: scroll;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 10px;
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
 }
 
-.Message {
-  margin-bottom: 5px;
-}
-
-.MessageForm {
+.chat-container {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  max-height: 300px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.message {
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.user {
+  background-color: #4caf50;
+  color: #fff;
+  align-self: flex-end;
+}
+
+.bot {
+  background-color: #2196f3;
+  color: #fff;
+  align-self: flex-start;
 }
 
 input[type="text"] {
-  flex: 1;
+  width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  margin-right: 10px;
+  margin-top: 10px;
+  font-size: 16px;
 }
 
 button {
-  padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #4caf50;
   color: #fff;
   border: none;
   border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 16px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #45a049;
 }
-
-.BotMessage {
-  color: blue; /* Change to your desired color for bot messages */
-}
-
-.UserMessage {
-  color: green; /* Change to your desired color for user messages */
-}
-
