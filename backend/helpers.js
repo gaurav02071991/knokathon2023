@@ -39,4 +39,8 @@ if (matches && matches.length > 0) {
   console.log("Pattern not found in the input string.");
 }
 }
-module.exports = {serviceName, runnerSetup, checker, getPolicyNumber}
+
+const createMessage = function(data){
+    return  'Hello '+ data.result.policies[0].policyHolderName + ' with policyNumber as ' + data.result.policies[0].policyNumber+ ' Can we get your damage details?';
+}
+module.exports = {serviceName, runnerSetup, checker, getPolicyNumber, createMessage}

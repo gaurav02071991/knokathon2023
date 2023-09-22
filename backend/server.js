@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require('axios');
 const dotenv = require('dotenv');
-const { serviceName, runnerSetup,checker, getPolicyNumber } = require('./helpers');
+const { serviceName, runnerSetup,checker, getPolicyNumber, createMessage } = require('./helpers');
 const cors=require('cors');
 dotenv.config();
 const app = express();
@@ -24,7 +24,7 @@ app.post("/api/chat", async (req, res) => {
       path:  `v1/policies?policyNumber=${answer}`
   });
   const response = await axios(axiosConfig);
-  res.json({message: 'Hello '+ response.data.result.policies[0].policyHolderName + ' with policyNumber as ' + response.data.result.policies[0].policyNumber});
+  res.json({message: createMessage(response.data)});
   }else{
  // Process user's message using node-nlp
  const response = await manager.process("en", userMessage);
