@@ -19,7 +19,7 @@ const runnerSetup = data => ({
     data
 });
 const prohibited = ['policyNumber'];
-const checker = value =>prohibited.some(element => value.includes(element))
+const checker = (value, pattern) =>prohibited.some(element => value.includes(element) || value.match(pattern))
 
 const getPolicyNumber = function(input){
     const inputString = input;

@@ -15,7 +15,8 @@ app.use(express.json());
 app.use(cors());
 app.post("/api/chat", async (req, res) => {
   const userMessage = req.body.message;
-  if(checker(userMessage)){
+  const pattern = /\d{2}-\d{7}-\d{2}/;
+  if(checker(userMessage, pattern)){
     const answer = getPolicyNumber(userMessage);
     const axiosConfig = runnerSetup({
       service: serviceName.fnolService,
