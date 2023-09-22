@@ -1,28 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
+import {questions} from './helpers';
 
 function App() {
   const [chatHistory, setChatHistory] = useState([]);
   const [userInput, setUserInput] = useState("");
-  const questions = [
-    "Welcome to FNOL, may I know your phone number or policy number?",
-    "Where are you from?",
-    "What is your favorite color?",
-    "What do you like to do in your free time?",
-  ];
 
   const initialBotMessageSent = useRef(false);
   let [currentQuestion, setCurrentQuestion] = useState(0);
-  const [policyData, setPolicyData] = useState(null);
-  const dummyPolicyData = {
-    policyNumber: "12345",
-    phoneNumber: "555-555-5555",
-  };
+  // const [policyData, setPolicyData] = useState(null);
+  // const dummyPolicyData = {
+  //   policyNumber: "12345",
+  //   phoneNumber: "555-555-5555",
+  // };
   
 
   useEffect(() => {
     if (!initialBotMessageSent.current) {
-      addMessageToHistory(questions[currentQuestion], "Bot");
+      addMessageToHistory(questions[currentQuestion].question, "Bot");
       initialBotMessageSent.current = true;
     }
   }, [currentQuestion]);
@@ -51,7 +46,7 @@ function App() {
         try {
           // Replace with your API endpoint to fetch policy data
           const apiUrl = 'http://localhost:3001/searchPolicy'; // Replace with your actual API URL
-          const queryParams = { question: questions[currentQuestion], answer };
+          const queryParams = { question: questions[currentQuestion].question, answer };
           const queryString = new URLSearchParams(queryParams).toString();
   
           const response = await fetch(`${apiUrl}?${queryString}`);
@@ -69,7 +64,7 @@ function App() {
       } else if (currentQuestion < questions.length - 1) {
         // Continue with the rest of the questions
         setCurrentQuestion(currentQuestion + 1);
-        addMessageToHistory(questions[++currentQuestion], "Bot");
+        addMessageToHistory(questions[++currentQuestion].question, "Bot");
       } else {
         // No more questions, end the conversation
         setCurrentQuestion(-1);
