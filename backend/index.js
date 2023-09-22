@@ -1,6 +1,8 @@
 const express = require('express');
 const axios = require('axios');
 const dotenv = require('dotenv');
+const { serviceName, runnerSetup } = require('./helpers');
+const cors=require('cors');
 dotenv.config();
 const app = express();
 const port = 3001; // Set your desired port
@@ -8,20 +10,21 @@ const authToken = process.env.AUTH_TOKEN;// Replace with your actual authorizati
 
 app.use(express.json());
 //test
-
+app.use(cors());
 // Define a common route for GET, POST, and PUT requests to api.public.in
 app.all('/:endpoint', async (req, res) => {
   const { endpoint } = req.params;
-  const apiUrl = `https://api.harmony-ins.com/${endpoint}`;
-
+  const {answer} =req.query
+  const apiUrl = `https://api.harmony-ins.com/svc?${endpoint}`;
+  const axiosConfig = runnerSetup({
+    service: serviceName.fnolService,
+    method: 'GET',
+    path:  `v1/policies?policyNumber=${answer}`
+});
   try {
     let response;
     if (req.method === 'GET') {
-      response = await axios.get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
+      response = await axios(axiosConfig);
     } else if (req.method === 'POST') {
       response = await axios.post(apiUrl, req.body, {
         headers: {
@@ -38,7 +41,7 @@ app.all('/:endpoint', async (req, res) => {
       return res.status(405).send('Method not allowed');
     }
 
-    res.status(response.status).json(response.data);
+  res.status(response.status).json(response.data);
   } catch (error) {
     if (error.response) {
       res.status(error.response.status).json(error.response.data);

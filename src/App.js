@@ -50,10 +50,12 @@ function App() {
 
         try {
           // Replace with your API endpoint to fetch policy data
-          const apiUrl = 'https://api.harmony-ins.com/chat'; // Replace with your actual API URL
-          const response = await fetch(apiUrl);
-          
-          if (true) {
+          const apiUrl = 'http://localhost:3001/searchPolicy'; // Replace with your actual API URL
+          const queryParams = { question: questions[currentQuestion], answer };
+          const queryString = new URLSearchParams(queryParams).toString();
+  
+          const response = await fetch(`${apiUrl}?${queryString}`);
+          if (response.status===200) {
             const policyDataResponse = await response.json(); // Parse the API response
             setPolicyData(policyDataResponse); // Store policy data in state
 
