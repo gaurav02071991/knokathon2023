@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require('axios');
 const dotenv = require('dotenv');
-const { serviceName, runnerSetup, checker, getPolicyNumber, createMessage, checkerforfnol,lossTypes,findMatchingElement } = require('./helpers');
+const { serviceName, runnerSetup, checker, getPolicyNumber, createMessage, checkerforfnol } = require('./helpers');
 const cors=require('cors');
 const pkg2 = require('./db.js');
 const { ready, db2 } = pkg2;
@@ -9,7 +9,10 @@ let db = {}
 ready.then(()=>{
      db = db2.connections[0].db;
 })
+const details = Object.freeze({
 
+})
+const apiResponses = [];
 dotenv.config();
 const app = express();
 const port = 5000;
@@ -35,10 +38,12 @@ app.post("/api/chat", async (req, res) => {
       path:  `v1/policies?policyNumber=${answer}`
   });
   const response = await axios(axiosConfig);
+  apiResponses.push(response.data)
   res.json({message: createMessage(response.data)});
   }else{
  // Process user's message using node-nlp
  const response = await manager.process("en", userMessage);
+ apiResponses.push(response.answer)
  // Get the best answer from the response
  const answer = response.score > 0.5 ? response.answer : "I'm not sure.";
  res.json({ message: answer });
