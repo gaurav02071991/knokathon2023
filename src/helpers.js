@@ -1,11 +1,24 @@
 const questions = [{
     question : "Welcome to FNOL, may I know your phone number or policy number?",
-    searchPolicy: {
+    endpoint: {
         url: 'searchPolicy',
         successmessage: function messageCreate(data) {
             return data.result.policies[0].policyNumber + ' has been found with policy holder as ' + data.result.policies[0].policyHolderName;
         },
         failedmessage: function messageCreate(data) {
+            return 'Sorry not able to process'
+        }
+
+    }
+},
+{
+    question : "Plz answer",
+    endpoint: {
+        url: '',
+        successmessage: function messageCreate(data) {
+            return 'Thanks for updating'
+        },
+        failedmessage: function messageCreate() {
             return 'Sorry not able to process'
         }
 

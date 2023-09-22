@@ -45,14 +45,23 @@ function App() {
 
         try {
           // Replace with your API endpoint to fetch policy data
-          const apiUrl = 'http://localhost:3001/searchPolicy'; // Replace with your actual API URL
-          const queryParams = { question: questions[currentQuestion].question, answer };
-          const queryString = new URLSearchParams(queryParams).toString();
-  
-          const response = await fetch(`${apiUrl}?${queryString}`);
+          let apiUrl = '';
+          let queryString = '';
+          let response = '';
+
+          if(questions[currentQuestion].endpoint.url){
+         apiUrl = `http://localhost:3001/${questions[currentQuestion].endpoint.url}`; // Replace with your actual API URL
+         const queryParams = { question: questions[currentQuestion].question, answer };
+         queryString = new URLSearchParams(queryParams).toString();
+         response = await fetch(`${apiUrl}?${queryString}`);
+          }
+          else {
+            response.status = 200;
+          }
+          
           if (response.status===200) {
             const data = await response.json();
-            const botResponse = data.result.policies[0].policyNumber + ' has been found with policy holder as ' + data.result.policies[0].policyHolderName; // Adjust the response parsing as needed
+            const botResponse = questions[currentQuestion].endpoint.successmessage(data); // Adjust the response parsing as needed
             addMessageToHistory(botResponse, "Bot");
           } else {
             addMessageToHistory("Bot: Sorry, I couldn't fetch the policy data.", "Bot");
@@ -64,7 +73,7 @@ function App() {
       } else if (currentQuestion < questions.length - 1) {
         // Continue with the rest of the questions
         setCurrentQuestion(currentQuestion + 1);
-        addMessageToHistory(questions[++currentQuestion].question, "Bot");
+        addMessageToHistory(questions[currentQuestion++].question, "Bot");
       } else {
         // No more questions, end the conversation
         setCurrentQuestion(-1);
