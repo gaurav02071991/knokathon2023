@@ -20,9 +20,18 @@ const runnerSetup = data => ({
 });
 const prohibited = ['policyNumber'];
 const fnol = ["fnol"];
+const lossTypes = ['3RD PARTY VEHICLE HIT PROPERTY', 'FIRE','FLOOD','FREEZE', 'FREEZING ICE AND SNOW', 'HAIL', 'INSURED PARTY VEHICLE HIT PROPERTY', 'LIGHTNING', 'LIGHTNING/POWER SURGE', 'LOSS ASSESSMENT', 'MISC', 'MISC - LOSS ASSESSMENT', 'MISC - STRUCTURAL',  'MOLD', 'POWER FAILURE', 'POWER SURGE', 'SEWER BACKUP', 'SMOKE', 'THEFT/BURGLARY', 'TROPICAL/HURRICANE', 'VANDALISM - BLDG OCCUPIED', 'VANDALISM - BLDG VACANT', 'WATER - EXTERNAL', 'WATER - INTERNAL', 'WIND']
 
 const checker = (value, pattern) =>prohibited.some(element => value.includes(element) || value.match(pattern))
-const checkerforfnol = (value, pattern) =>fnol.some(element => value.includes(element) || value.match(pattern))
+const checkerforfnol = (value) =>fnol.some(element => value.includes(element))
+function findMatchingElement(inputString, stringArray) {
+    for (const element of stringArray) {
+      if (inputString?.toUpperCase().includes(element)) {
+        return element;
+      }
+    }
+    return null; // Return null if no match is found
+  }
 const getPolicyNumber = function(input){
     const inputString = input;
 
@@ -45,4 +54,4 @@ if (matches && matches.length > 0) {
 const createMessage = function(data){
     return  'Hello '+ data.result.policies[0].policyHolderName + ' with policyNumber as ' + data.result.policies[0].policyNumber+ ' Can we get your damage details?';
 }
-module.exports = {serviceName, runnerSetup, checker, getPolicyNumber, createMessage, checkerforfnol}
+module.exports = {serviceName, runnerSetup, checker, getPolicyNumber, createMessage, checkerforfnol,lossTypes,findMatchingElement}

@@ -1,7 +1,11 @@
 const { NlpManager } = require('node-nlp');
 
 const manager = new NlpManager({ languages: ['en'], forceNER: true });
+const lossTypes = ['3RD PARTY VEHICLE HIT PROPERTY', 'FIRE','FLOOD','FREEZE', 'FREEZING ICE AND SNOW', 'HAIL', 'INSURED PARTY VEHICLE HIT PROPERTY', 'LIGHTNING', 'LIGHTNING/POWER SURGE', 'LOSS ASSESSMENT', 'MISC', 'MISC - LOSS ASSESSMENT', 'MISC - STRUCTURAL',  'MOLD', 'POWER FAILURE', 'POWER SURGE', 'SEWER BACKUP', 'SMOKE', 'THEFT/BURGLARY', 'TROPICAL/HURRICANE', 'VANDALISM - BLDG OCCUPIED', 'VANDALISM - BLDG VACANT', 'WATER - EXTERNAL', 'WATER - INTERNAL', 'WIND']
 // Adds the utterances and intents for the NLP
+lossTypes.forEach((lossType)=>{
+    manager.addDocument('en', `${lossType}`, `agent.${lossType}`);
+})
 manager.addDocument('en', 'say about you', 'agent.acquaintance');
 manager.addDocument('en', 'why are you here', 'agent.acquaintance');
 manager.addDocument('en', 'what is your personality', 'agent.acquaintance');
@@ -167,6 +171,7 @@ manager.addDocument('en', 'we are friends', 'agent.myfriend');
 manager.addDocument('en', 'I want to be your friend', 'agent.myfriend');
 manager.addDocument('en', 'would you be my friend', 'agent.myfriend');
 manager.addDocument('en', 'are we friends', 'agent.myfriend');
+manager.addDocument('en', 'Yes', 'agent.YesAdditionalInfo');
 manager.addDocument('en', 'where is your work', 'agent.occupation');
 manager.addDocument('en', 'your office location', 'agent.occupation');
 manager.addDocument(
@@ -178,6 +183,7 @@ manager.addDocument('en', 'where do you work', 'agent.occupation');
 manager.addDocument('en', 'where is your office', 'agent.occupation');
 manager.addDocument('en', 'claim', 'agent.claim');
 manager.addDocument('en', 'damage', 'agent.damage');
+manager.addDocument('en', 'having damage', 'agent.damageDetail');
 manager.addDocument('en', 'where are you from', 'agent.origin');
 manager.addDocument('en', 'where is your country', 'agent.origin');
 manager.addDocument('en', 'where have you been born', 'agent.origin');
@@ -365,7 +371,9 @@ const hrstart = process.hrtime();
 const hrend = process.hrtime(hrstart);
 console.info('Trained (hr): %ds %dms', hrend[0], hrend[1] / 1000000);
 // say('Trained!');
-
+lossTypes.forEach((lossType)=>{
+    manager.addAnswer('en', `agent.${lossType}`, `It seems you had loss due to ${lossType}`);
+})
 manager.addAnswer('en', 'agent.acquaintance', "I'm a virtual agent");
 manager.addAnswer(
   'en',
@@ -565,7 +573,8 @@ manager.addAnswer(
 );
 manager.addAnswer('en', 'agent.occupation', 'Right here');
 manager.addAnswer('en', 'agent.claim', 'ohh It seems you need to file a claim. Sorry for your loss! Can you help me out with your policyNumber');
-manager.addAnswer('en', 'agent.damage', 'bht sara damage hua bhai');
+manager.addAnswer('en', 'agent.damage', 'Can you tell us about the damages');
+manager.addAnswer('en', 'agent.damageDetail', 'Based on you details we can check')
 manager.addAnswer(
   'en',
   'agent.occupation',
@@ -609,6 +618,7 @@ manager.addAnswer(
 manager.addAnswer('en', 'agent.right', 'Of course I am');
 manager.addAnswer('en', 'agent.right', "That's my job");
 manager.addAnswer('en', 'agent.sure', 'Yes');
+manager.addAnswer('en', 'agent.YesAdditionalInfo', 'Please provide the additional Info');
 manager.addAnswer('en', 'agent.sure', 'Of course');
 manager.addAnswer('en', 'agent.talktome', "Sure! Let's talk!");
 manager.addAnswer('en', 'agent.talktome', "My pleasure. Let's chat.");

@@ -1,8 +1,7 @@
 const express = require("express");
 const axios = require('axios');
 const dotenv = require('dotenv');
-const mongoose = require('mongoose');
-const { serviceName, runnerSetup, checker, getPolicyNumber, createMessage, checkerforfnol } = require('./helpers');
+const { serviceName, runnerSetup, checker, getPolicyNumber, createMessage, checkerforfnol,lossTypes,findMatchingElement } = require('./helpers');
 const cors=require('cors');
 const pkg2 = require('./db.js');
 const { ready, db2 } = pkg2;
@@ -24,7 +23,7 @@ app.use(cors());
 app.post("/api/chat", async (req, res) => {
   const userMessage = req.body.message;
   const pattern = /\d{2}-\d{7}-\d{2}/;
-  if(checkerforfnol(userMessage, pattern)){
+  if(checkerforfnol(userMessage)){
     const data = await db.collection('quickfnol').insertOne({fnolNumber:"1234"});
     return true;
   }
@@ -40,7 +39,6 @@ app.post("/api/chat", async (req, res) => {
   }else{
  // Process user's message using node-nlp
  const response = await manager.process("en", userMessage);
-
  // Get the best answer from the response
  const answer = response.score > 0.5 ? response.answer : "I'm not sure.";
  res.json({ message: answer });
