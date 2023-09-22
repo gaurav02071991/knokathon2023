@@ -1,4 +1,5 @@
-const createFnolBody = function(policy, claimDetail){
+const createFnolBody = function(apiRespnses, policy, claimDetail){
+    
  let fnolRecordBody= {};
     fnolRecordBody.fnolType = 'claim';
     fnolRecordBody.claimType = 'daily';

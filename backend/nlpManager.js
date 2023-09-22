@@ -14,6 +14,7 @@ manager.addDocument('en', 'tell me about yourself', 'agent.acquaintance');
 manager.addDocument('en', 'tell me about you', 'agent.acquaintance');
 manager.addDocument('en', 'what are you', 'agent.acquaintance');
 manager.addDocument('en', 'who are you', 'agent.acquaintance');
+manager.addDocument('en', 'property damage livable', 'agent.propertyLivable');
 manager.addDocument(
   'en',
   'I want to know more about you',
@@ -85,6 +86,8 @@ manager.addDocument('en', 'are you still working on it', 'agent.busy');
 manager.addDocument('en', 'you seem busy', 'agent.busy');
 manager.addDocument('en', 'are you working today', 'agent.busy');
 manager.addDocument('en', 'can you help me now', 'agent.canyouhelp');
+manager.addDocument('en', 'loss date', 'agent.lossDate');
+manager.addDocument('en', 'loss as per date', 'agent.Date');
 manager.addDocument(
   'en',
   'I need you to do something for me',
@@ -240,6 +243,7 @@ manager.addDocument('en', 'really well', 'appraisal.good');
 manager.addDocument('en', "that's awesome thank you", 'appraisal.good');
 manager.addDocument('en', 'no problem', 'appraisal.noproblem');
 manager.addDocument('en', 'no worries', 'appraisal.noproblem');
+manager.addDocument('en', 'No', 'appraisal.No');
 manager.addDocument('en', 'no problem about that', 'appraisal.noproblem');
 manager.addDocument('en', "don't worry", 'appraisal.noproblem');
 manager.addDocument('en', 'sure no problem', 'appraisal.noproblem');
@@ -294,6 +298,7 @@ manager.addDocument('en', 'what about your day', 'greetings.howareyou');
 manager.addDocument('en', 'are you alright', 'greetings.howareyou');
 manager.addDocument('en', 'nice to meet you', 'greetings.nicetomeetyou');
 manager.addDocument('en', 'pleased to meet you', 'greetings.nicetomeetyou');
+manager.addDocument('en', 'No that is all', 'agent.finalinput');
 manager.addDocument(
   'en',
   'it was very nice to meet you',
@@ -372,7 +377,7 @@ const hrend = process.hrtime(hrstart);
 console.info('Trained (hr): %ds %dms', hrend[0], hrend[1] / 1000000);
 // say('Trained!');
 lossTypes.forEach((lossType)=>{
-    manager.addAnswer('en', `agent.${lossType}`, `It seems you had loss due to ${lossType}`);
+    manager.addAnswer('en', `agent.${lossType}`, `It seems you had loss due to ${lossType}. Is it correct ?`);
 })
 manager.addAnswer('en', 'agent.acquaintance', "I'm a virtual agent");
 manager.addAnswer(
@@ -434,6 +439,8 @@ manager.addAnswer('en', 'agent.beclever', "I'm definitely working on it");
 manager.addAnswer('en', 'agent.beautiful', 'Oh! Thank you!');
 manager.addAnswer('en', 'agent.beautiful', 'Aw, back at you');
 manager.addAnswer('en', 'agent.beautiful', 'You smooth talker, you');
+manager.addAnswer('en',  'agent.lossDate', 'Can you tell me the date of loss?');
+manager.addAnswer('en', 'agent.Date', "Is this your lossDate ? ");
 manager.addAnswer(
   'en',
   'agent.birthday',
@@ -528,6 +535,8 @@ manager.addAnswer('en', 'agent.funny', "Glad you think I'm funny");
 manager.addAnswer('en', 'agent.funny', 'I like it when people laugh');
 manager.addAnswer('en', 'agent.good', "I'm glad you think so");
 manager.addAnswer('en', 'agent.good', 'Thanks! I do my best!');
+manager.addAnswer('en','agent.propertyLivable', 'Is Your Property Livable?');
+manager.addAnswer('en','agent.finalinput', 'Thanks for the input system is checking if all information to file a quickFnol is there.');
 manager.addAnswer(
   'en',
   'agent.happy',
@@ -573,7 +582,7 @@ manager.addAnswer(
 );
 manager.addAnswer('en', 'agent.occupation', 'Right here');
 manager.addAnswer('en', 'agent.claim', 'ohh It seems you need to file a claim. Sorry for your loss! Can you help me out with your policyNumber');
-manager.addAnswer('en', 'agent.damage', 'Can you tell us about the damages');
+manager.addAnswer('en', 'agent.damage', 'Can you tell us more about the damages');
 manager.addAnswer('en', 'agent.damageDetail', 'Based on you details we can check')
 manager.addAnswer(
   'en',
@@ -638,6 +647,7 @@ manager.addAnswer('en', 'appraisal.good', 'Agree!');
 manager.addAnswer('en', 'appraisal.good', 'Glad you think so');
 manager.addAnswer('en', 'appraisal.noproblem', 'Glad to hear that!');
 manager.addAnswer('en', 'appraisal.noproblem', 'Alright, thanks!');
+manager.addAnswer('en', 'appraisal.No', 'Sorry. Can you provide more details if any?');
 manager.addAnswer(
   'en',
   'appraisal.thankyou',

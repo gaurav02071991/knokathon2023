@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 dotenv.config();
-
+const moment = require("moment");
 const authToken = process.env.AUTH_TOKEN;
 const serviceName = {
     policyManager: "policy-manager",
@@ -54,4 +54,29 @@ if (matches && matches.length > 0) {
 const createMessage = function(data){
     return  'Hello '+ data.result.policies[0].policyHolderName + ' with policyNumber as ' + data.result.policies[0].policyNumber+ ' Can we get your damage details?';
 }
-module.exports = {serviceName, runnerSetup, checker, getPolicyNumber, createMessage, checkerforfnol,lossTypes,findMatchingElement}
+
+function parseDateFromString(dateString) {
+    const supportedFormats = [
+        "Do MMM YYYY",       // Example: "2nd Oct 2023"
+        "MMM Do YYYY",       // Example: "Oct 2nd 2023"
+        "YYYY-MM-DD",        // Example: "2023-10-02"
+        "YYYY-MM-DDTHH:mm:ss.sssZ", // Example: "2023-10-02T00:00:00.000Z"
+        // Add more supported date formats as needed
+      ];
+  
+    for (const format of supportedFormats) {
+      const parsedDate = moment(dateString, format, true);
+      if (parsedDate.isValid()) {
+        return parsedDate.toISOString(); // Return ISO string format if valid
+      }
+    }
+  
+    return null; // Invalid date for all supported formats
+  }
+
+const mandatoryanswers = [
+    
+]  
+  
+  
+module.exports = {serviceName, runnerSetup, checker, getPolicyNumber, createMessage, checkerforfnol,lossTypes,parseDateFromString}
