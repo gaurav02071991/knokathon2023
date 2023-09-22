@@ -56,14 +56,9 @@ function App() {
   
           const response = await fetch(`${apiUrl}?${queryString}`);
           if (response.status===200) {
-            const policyDataResponse = await response.json(); // Parse the API response
-            setPolicyData(policyDataResponse); // Store policy data in state
-
-            // Proceed to the next question
-            setTimeout(() => {
-              setCurrentQuestion(currentQuestion + 1);
-              addMessageToHistory(questions[++currentQuestion], "Bot");
-            }, 1000); // Delay to simulate bot response
+            const data = await response.json();
+            const botResponse = data.result.policies[0].policyNumber + ' has been found with policy holder as ' + data.result.policies[0].policyHolderName; // Adjust the response parsing as needed
+            addMessageToHistory(botResponse, "Bot");
           } else {
             addMessageToHistory("Bot: Sorry, I couldn't fetch the policy data.", "Bot");
           }
