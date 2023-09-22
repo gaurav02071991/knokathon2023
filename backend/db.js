@@ -7,7 +7,7 @@ const { init } = require('exframe-db');
 
 const logger = {}
 
-var conn2 = init({ logger, name: 'harmony', dbUrl: 'mongodb://localhost:27017/fnol' });
+var conn2 = init({ logger, name: '', dbUrl: '' });
   const ready2 = conn2.connect()
   .then(
     () =>  true,
