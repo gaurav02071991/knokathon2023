@@ -19,8 +19,10 @@ const runnerSetup = data => ({
     data
 });
 const prohibited = ['policyNumber'];
-const checker = (value, pattern) =>prohibited.some(element => value.includes(element) || value.match(pattern))
+const fnol = ["fnol"];
 
+const checker = (value, pattern) =>prohibited.some(element => value.includes(element) || value.match(pattern))
+const checkerforfnol = (value, pattern) =>fnol.some(element => value.includes(element) || value.match(pattern))
 const getPolicyNumber = function(input){
     const inputString = input;
 
@@ -43,4 +45,4 @@ if (matches && matches.length > 0) {
 const createMessage = function(data){
     return  'Hello '+ data.result.policies[0].policyHolderName + ' with policyNumber as ' + data.result.policies[0].policyNumber+ ' Can we get your damage details?';
 }
-module.exports = {serviceName, runnerSetup, checker, getPolicyNumber, createMessage}
+module.exports = {serviceName, runnerSetup, checker, getPolicyNumber, createMessage, checkerforfnol}
