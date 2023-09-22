@@ -5,7 +5,7 @@ function App() {
   const [chatHistory, setChatHistory] = useState([]);
   const [userInput, setUserInput] = useState("");
   const questions = [
-    "What is your name?",
+    "Welcome to FNOL, may I know your phone number or policy number?",
     "Where are you from?",
     "What is your favorite color?",
     "What do you like to do in your free time?",
@@ -13,6 +13,12 @@ function App() {
 
   const initialBotMessageSent = useRef(false);
   let [currentQuestion, setCurrentQuestion] = useState(0);
+  const [policyData, setPolicyData] = useState(null);
+  const dummyPolicyData = {
+    policyNumber: "12345",
+    phoneNumber: "555-555-5555",
+  };
+  
 
   useEffect(() => {
     if (!initialBotMessageSent.current) {
@@ -38,31 +44,37 @@ function App() {
       addMessageToHistory(answer, "You");
       setUserInput("");
 
-      if (currentQuestion < questions.length - 1) {
+      if (currentQuestion === 0) {
         // Simulate bot thinking time
-        addMessageToHistory("Bot is typing...", "Bot");
+        addMessageToHistory("Bot is processing your request...", "Bot");
 
         try {
-          // Replace with your API endpoint
-          const apiUrl = "https://localhost:3000/chat"; // Replace with your actual API URL
-         // const response = await fetch(apiUrl);
+          // Replace with your API endpoint to fetch policy data
+          const apiUrl = 'https://api.harmony-ins.com/chat'; // Replace with your actual API URL
+          const response = await fetch(apiUrl);
+          
           if (true) {
-            //const data = await response.json();
-            const botResponse = "answer" //data.answer; // Adjust the response parsing as needed
-            addMessageToHistory(botResponse, "Bot");
+            const policyDataResponse = await response.json(); // Parse the API response
+            setPolicyData(policyDataResponse); // Store policy data in state
+
+            // Proceed to the next question
+            setTimeout(() => {
+              setCurrentQuestion(currentQuestion + 1);
+              addMessageToHistory(questions[++currentQuestion], "Bot");
+            }, 1000); // Delay to simulate bot response
           } else {
-            addMessageToHistory("Bot: Sorry, I couldn't fetch the answer.", "Bot");
+            addMessageToHistory("Bot: Sorry, I couldn't fetch the policy data.", "Bot");
           }
         } catch (error) {
           console.error(error);
-          addMessageToHistory("Bot: Sorry, an error occurred while fetching the answer.", "Bot");
+          addMessageToHistory("Bot: Sorry, an error occurred while fetching the policy data.", "Bot");
         }
-
-        setTimeout(() => {
-          setCurrentQuestion(currentQuestion + 1);
-          addMessageToHistory(questions[++currentQuestion], "Bot");
-        }, 1000); // Delay to simulate bot response
+      } else if (currentQuestion < questions.length - 1) {
+        // Continue with the rest of the questions
+        setCurrentQuestion(currentQuestion + 1);
+        addMessageToHistory(questions[++currentQuestion], "Bot");
       } else {
+        // No more questions, end the conversation
         setCurrentQuestion(-1);
       }
     }
