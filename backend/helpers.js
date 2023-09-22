@@ -18,4 +18,25 @@ const runnerSetup = data => ({
     url: `${process.env.REACT_APP_API_URL}`,
     data
 });
-module.exports = {serviceName, runnerSetup}
+const prohibited = ['policyNumber'];
+const checker = value =>prohibited.some(element => value.includes(element))
+
+const getPolicyNumber = function(input){
+    const inputString = input;
+
+// Define a regular expression pattern
+const pattern = /\d{2}-\d{7}-\d{2}/;
+
+// Use the pattern to search for matches in the input string
+const matches = inputString.match(pattern);
+
+// Check if there are any matches and extract the first one
+if (matches && matches.length > 0) {
+  const extractedPattern = matches[0];
+  console.log("Extracted Pattern:", extractedPattern);
+  return extractedPattern;
+} else {
+  console.log("Pattern not found in the input string.");
+}
+}
+module.exports = {serviceName, runnerSetup, checker, getPolicyNumber}

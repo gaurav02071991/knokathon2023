@@ -176,6 +176,7 @@ manager.addDocument(
 );
 manager.addDocument('en', 'where do you work', 'agent.occupation');
 manager.addDocument('en', 'where is your office', 'agent.occupation');
+manager.addDocument('en', 'policyNumber', 'agent.policyNumber');
 manager.addDocument('en', 'where are you from', 'agent.origin');
 manager.addDocument('en', 'where is your country', 'agent.origin');
 manager.addDocument('en', 'where have you been born', 'agent.origin');
@@ -562,6 +563,7 @@ manager.addAnswer(
   'I always enjoy talking to you, friend'
 );
 manager.addAnswer('en', 'agent.occupation', 'Right here');
+manager.addAnswer('en', 'agent.policyNumber', 'ohh this is your policyNumber its great');
 manager.addAnswer(
   'en',
   'agent.occupation',
